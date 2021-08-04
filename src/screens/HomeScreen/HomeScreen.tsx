@@ -28,7 +28,17 @@ const getItemLayout = (_: Event[] | null | undefined, index: number) => {
 type HomeScreenProps = StackScreenProps<RootStackScreenParamList, Screens.Home>;
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
-  const { data, isLoading, isFetching, isError, refetchAllowed, refetch } = useEvents();
+  const {
+    data,
+    isLoading,
+    isFetching,
+    isError,
+    isUninitialized,
+    isSuccess,
+    refetchAllowed,
+    refetch,
+    requestId,
+  } = useEvents();
 
   useEffect(() => {
     SplashScreen.hide();
@@ -94,6 +104,15 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     }
     return undefined;
   }, [isLoading, isError]);
+
+  console.debug(`${requestId} -> hasData`, !!data);
+  console.debug(`${requestId} -> isLoading`, isLoading);
+  console.debug(`${requestId} -> isFetching`, isFetching);
+  console.debug(`${requestId} -> isError`, isError);
+  console.debug(`${requestId} -> isUninitialized`, isUninitialized);
+  console.debug(`${requestId} -> isSuccess`, isSuccess);
+  console.debug(`${requestId} -> refetchAllowed`, refetchAllowed);
+  console.debug('-------------------------------------------------');
 
   return (
     <SafeAreaView style={styles.container}>

@@ -22,10 +22,20 @@ const useEvents = () => {
   });
   const { pollingInterval, refetchAllowed } = config;
 
-  const { data, error, refetch, isLoading, isFetching, isError, startedTimeStamp } =
-    useGetEventsQuery(ELEMENTS_PER_PAGE, {
-      pollingInterval,
-    });
+  const {
+    data,
+    error,
+    refetch,
+    isLoading,
+    isFetching,
+    isUninitialized,
+    isSuccess,
+    isError,
+    startedTimeStamp,
+    requestId,
+  } = useGetEventsQuery(ELEMENTS_PER_PAGE, {
+    pollingInterval,
+  });
 
   // save refetch to ref for minimize rerenders
   const savedRefetch = useRef<(() => void) | null>(null);
@@ -85,6 +95,9 @@ const useEvents = () => {
     refetch,
     isLoading,
     isFetching,
+    isUninitialized,
+    isSuccess,
+    requestId,
   };
 };
 
