@@ -8,7 +8,10 @@ const POLLING_INTERVAL = 60 * 1000;
 const REFETCH_INTERVAL = 15 * 1000;
 
 interface Config {
+  /** polling interval in milliseconds. defaults to `0` (off) */
   pollingInterval: number;
+
+  /** enable/disable manual refetch */
   refetchAllowed: boolean;
 }
 
@@ -26,11 +29,13 @@ const useEvents = () => {
     },
   );
 
+  // save refetch to ref for minimize rerenders
   const savedRefetch = useRef<(() => void) | null>(null);
   useEffect(() => {
     savedRefetch.current = refetch;
   }, [refetch]);
 
+  // restarting the timer on new request and transition on event screen
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     if (startedTimeStamp && pollingInterval && !isFetching && !isLoading) {
@@ -56,14 +61,18 @@ const useEvents = () => {
 
   useFocusEffect(
     useCallback(() => {
+      // refetch on focus
       savedRefetch.current?.();
       setConfig(prev => ({
         ...prev,
+        // start polling
         pollingInterval: POLLING_INTERVAL,
       }));
       return () => {
         setConfig({
+          // disable polling
           pollingInterval: 0,
+          // disable manual refetch
           refetchAllowed: false,
         });
       };

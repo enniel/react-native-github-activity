@@ -33,6 +33,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     SplashScreen.hide();
   }, []);
 
+  // save refetch to ref for minimize rerenders
   const savedRefetch = useRef<(() => void) | null>(null);
   useEffect(() => {
     savedRefetch.current = refetch;
@@ -48,6 +49,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   }, [navigation]);
 
   const headerRight: (() => ReactElement) | undefined = useMemo(() => {
+    // show loading indicator
     if (isFetching && !isLoading) {
       return () => (
         <View style={styles.headerButton}>
@@ -55,6 +57,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         </View>
       );
     }
+    // show button for manual refetch
     if (refetchAllowed) {
       const handleRefetch = () => savedRefetch.current?.();
       return () => (
@@ -66,6 +69,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     return undefined;
   }, [isFetching, isLoading, refetchAllowed]);
 
+  // set header right buttons
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight,
@@ -73,6 +77,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   }, [navigation, headerRight]);
 
   const ListEmptyComponent: ReactElement | undefined = useMemo(() => {
+    // show full screen indicator on first loading
     if (isLoading) {
       return <FullScreenLoading />;
     }
