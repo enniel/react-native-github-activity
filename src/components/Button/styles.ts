@@ -13,14 +13,15 @@ const styles = StyleSheet.create<Styles>({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.primary,
+    backgroundColor: colors.black,
     borderRadius: 5,
     height: 56,
     maxHeight: 56,
+    paddingHorizontal: 20,
   },
   text: {
     ...typography.Heading5R,
-    color: colors.black,
+    color: colors.white,
   },
 });
 

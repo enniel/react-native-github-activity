@@ -1,11 +1,12 @@
 import { useRef, useEffect, useMemo, useLayoutEffect, ReactElement } from 'react';
-import { FlatList, ListRenderItem, View, Pressable } from 'react-native';
+import { FlatList, ListRenderItem, View, Pressable, Text } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import SplashScreen from 'react-native-splash-screen';
 import { StackScreenProps } from '@react-navigation/stack';
 import LoadingIndicator from '@rnga/components/LoadingIndicator';
 import FullScreenLoading from '@rnga/components/FullScreenLoading';
 import RefreshIcon from '@rnga/components/RefreshIcon';
+import Button from '@rnga/components/Button';
 import { Event } from '@rnga/store/services/events/types';
 import { Screens, RootStackScreenParamList } from '@rnga/types';
 import useEvents from './useEvents';
@@ -27,7 +28,7 @@ const getItemLayout = (_: Event[] | null | undefined, index: number) => {
 type HomeScreenProps = StackScreenProps<RootStackScreenParamList, Screens.Home>;
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
-  const { data, isLoading, isFetching, refetchAllowed, refetch } = useEvents();
+  const { data, isLoading, isFetching, isError, refetchAllowed, refetch } = useEvents();
 
   useEffect(() => {
     SplashScreen.hide();
@@ -77,12 +78,22 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   }, [navigation, headerRight]);
 
   const ListEmptyComponent: ReactElement | undefined = useMemo(() => {
+    // show error
+    if (isError) {
+      const handleRefetch = () => savedRefetch.current?.();
+      return (
+        <View style={styles.errorView}>
+          <Text style={styles.errorText}>Oh no! An error occurred while loading the data.</Text>
+          <Button onPress={handleRefetch} wrapperStyle={styles.reloadButton} text="Try again" />
+        </View>
+      );
+    }
     // show full screen indicator on first loading
     if (isLoading) {
       return <FullScreenLoading />;
     }
     return undefined;
-  }, [isLoading]);
+  }, [isLoading, isError]);
 
   return (
     <SafeAreaView style={styles.container}>

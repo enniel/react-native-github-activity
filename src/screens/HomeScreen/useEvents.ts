@@ -22,12 +22,10 @@ const useEvents = () => {
   });
   const { pollingInterval, refetchAllowed } = config;
 
-  const { data, error, refetch, isLoading, isFetching, startedTimeStamp } = useGetEventsQuery(
-    ELEMENTS_PER_PAGE,
-    {
+  const { data, error, refetch, isLoading, isFetching, isError, startedTimeStamp } =
+    useGetEventsQuery(ELEMENTS_PER_PAGE, {
       pollingInterval,
-    },
-  );
+    });
 
   // save refetch to ref for minimize rerenders
   const savedRefetch = useRef<(() => void) | null>(null);
@@ -38,7 +36,7 @@ const useEvents = () => {
   // restarting the timer on new request and transition on event screen
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
-    if (startedTimeStamp && pollingInterval && !isFetching && !isLoading) {
+    if (startedTimeStamp && pollingInterval && !isFetching && !isLoading && !isError) {
       timer = setTimeout(() => {
         const now = Date.now();
         setConfig(prev => ({
@@ -57,7 +55,7 @@ const useEvents = () => {
         clearTimeout(timer);
       }
     };
-  }, [startedTimeStamp, pollingInterval, isFetching, isLoading]);
+  }, [startedTimeStamp, pollingInterval, isFetching, isLoading, isError]);
 
   useFocusEffect(
     useCallback(() => {
@@ -82,6 +80,7 @@ const useEvents = () => {
   return {
     data,
     error,
+    isError,
     refetchAllowed,
     refetch,
     isLoading,
