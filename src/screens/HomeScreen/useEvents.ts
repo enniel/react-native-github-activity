@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { useGetEventsQuery } from '@bdi/store/services/events';
+import { useGetEventsQuery } from '@rnga/store/services/events';
 
 const ELEMENTS_PER_PAGE = 25;
 

@@ -1,4 +1,4 @@
-import { Event } from '@bdi/store/services/events/types';
+import { Event } from '@rnga/store/services/events/types';
 
 export enum Screens {
   Home = 'Home',

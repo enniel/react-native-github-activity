@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import Svg, { SvgProps, Path } from 'react-native-svg';
-import colors from '@bdi/theme/colors';
+import colors from '@rnga/theme/colors';
 
 interface RefreshIconProps extends SvgProps {
   size?: number;

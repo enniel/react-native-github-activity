@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 import { MaterialIndicator, UIActivityIndicator } from 'react-native-indicators';
-import colors from '@bdi/theme/colors';
+import colors from '@rnga/theme/colors';
 
 const isAndroid = Platform.OS === 'android';
 

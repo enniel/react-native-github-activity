@@ -1,7 +1,7 @@
 import { Text, ScrollView } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Screens, RootStackScreenParamList } from '@bdi/types';
+import { Screens, RootStackScreenParamList } from '@rnga/types';
 import styles from './styles';
 
 type EventScreenProps = StackScreenProps<RootStackScreenParamList, Screens.Event>;

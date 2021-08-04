@@ -1,6 +1,6 @@
 import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import colors from '@bdi/theme/colors';
-import typography from '@bdi/theme/typography';
+import colors from '@rnga/theme/colors';
+import typography from '@rnga/theme/typography';
 
 interface Styles {
   button: ViewStyle;

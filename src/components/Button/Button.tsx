@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Text, Pressable, StyleProp, ViewStyle } from 'react-native';
-import LoadingIndicator from '@bdi/components/LoadingIndicator';
-import colors from '@bdi/theme/colors';
+import LoadingIndicator from '@rnga/components/LoadingIndicator';
+import colors from '@rnga/theme/colors';
 import styles from './styles';
 
 export interface ButtonProps {

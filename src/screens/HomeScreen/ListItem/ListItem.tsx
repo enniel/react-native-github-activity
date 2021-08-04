@@ -1,5 +1,5 @@
 import { View, Text, Image, Pressable } from 'react-native';
-import { Event } from '@bdi/store/services/events/types';
+import { Event } from '@rnga/store/services/events/types';
 import styles from './styles';
 
 interface ListItemProps {
