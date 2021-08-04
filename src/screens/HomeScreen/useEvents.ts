@@ -11,7 +11,7 @@ interface Config {
   /** polling interval in milliseconds. defaults to `0` (off) */
   pollingInterval: number;
 
-  /** enable/disable manual refetch */
+  /** allow/disallow manual refetch */
   refetchAllowed: boolean;
 }
 
@@ -43,10 +43,18 @@ const useEvents = () => {
     savedRefetch.current = refetch;
   }, [refetch]);
 
-  // restarting the timer on new request and transition on event screen
+  // restarting the timer on new request
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
-    if (startedTimeStamp && pollingInterval && !isFetching && !isLoading && !isError) {
+    // start timer for allow manual refetch on new request
+    if (
+      prevRequestId.current !== requestId &&
+      startedTimeStamp &&
+      pollingInterval &&
+      !isFetching &&
+      !isLoading &&
+      !isError
+    ) {
       timer = setTimeout(() => {
         const now = Date.now();
         setConfig(prev => ({
@@ -54,7 +62,9 @@ const useEvents = () => {
           refetchAllowed: now - startedTimeStamp >= REFETCH_INTERVAL,
         }));
       }, REFETCH_INTERVAL);
-    } else {
+    }
+    // disallow manual refetch on new request, if allowed
+    if (prevRequestId.current !== requestId && !isLoading && isFetching && refetchAllowed) {
       setConfig(prev => ({
         ...prev,
         refetchAllowed: false,
@@ -65,17 +75,34 @@ const useEvents = () => {
         clearTimeout(timer);
       }
     };
-  }, [startedTimeStamp, pollingInterval, isFetching, isLoading, isError]);
+  }, [
+    requestId,
+    startedTimeStamp,
+    pollingInterval,
+    isFetching,
+    isLoading,
+    isError,
+    refetchAllowed,
+  ]);
+
+  // save prev request id to ref
+  const prevRequestId = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (prevRequestId.current !== requestId && !isFetching && !isLoading) {
+      prevRequestId.current = requestId;
+    }
+  }, [requestId, isFetching, isLoading]);
 
   useFocusEffect(
     useCallback(() => {
       // refetch on focus
       savedRefetch.current?.();
-      setConfig(prev => ({
-        ...prev,
-        // start polling
+      setConfig({
+        // enable polling
         pollingInterval: POLLING_INTERVAL,
-      }));
+        // disable manual refetch
+        refetchAllowed: false,
+      });
       return () => {
         setConfig({
           // disable polling
@@ -98,6 +125,7 @@ const useEvents = () => {
     isUninitialized,
     isSuccess,
     requestId,
+    pollingInterval,
   };
 };
 

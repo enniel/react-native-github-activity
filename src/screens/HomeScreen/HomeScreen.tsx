@@ -38,6 +38,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     refetchAllowed,
     refetch,
     requestId,
+    pollingInterval,
   } = useEvents();
 
   useEffect(() => {
@@ -112,6 +113,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   console.debug(`${requestId} -> isUninitialized`, isUninitialized);
   console.debug(`${requestId} -> isSuccess`, isSuccess);
   console.debug(`${requestId} -> refetchAllowed`, refetchAllowed);
+  console.debug(`${requestId} -> pollingInterval`, pollingInterval);
   console.debug('-------------------------------------------------');
 
   return (
